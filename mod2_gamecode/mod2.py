@@ -61,13 +61,14 @@ def create_fish():
     fish_y = random.randint(HORIZON_Y + 20, SCREEN_HEIGHT - fish_size)  # Randomize y-coordinate of spawnning fishies
 
     # color and points based on fish's speed
-    if fish_speed == fish_speeds[0]:  # grey slowest
+    #grey is slowest(easy), yellow is faster (mid), green is fastest(hard)
+    if fish_speed == fish_speeds[0]:  
         color = GREY
         points_value = 1
-    elif fish_speed == fish_speeds[1]:  # yellow faster
+    elif fish_speed == fish_speeds[1]: 
         color = YELLOW
         points_value = 2
-    else:  # green fastest 
+    else: 
         color = GREEN
         points_value = 3
 
@@ -102,24 +103,28 @@ def move_fish(fish):
 def check_hooked_fish():
     global hooked_fish
     for fish in fish_list:
-        if (buttonVal == 0 and  # Check if the button is pressed
+        #check if button is pressed, and the fishing line is within paramters of the fish
+        if (buttonVal == 0 and 
             fishing_line_x >= fish['x'] and fishing_line_x <= fish['x'] + fish_size and
             fishing_line_y >= fish['y'] and fishing_line_y <= fish['y'] + fish_size):
             hooked_fish = fish
-            hooked_fish['speed'] = 0  # Stop fish movement on the x-axis
-            hooked_fish['x'] = fishing_line_x - 25  # Set fish x-coordinate to fishing line x-coordinate
-            hooked_fish['y'] = fishing_line_y  # Set fish y-coordinate to fishing line y-coordinate
+
+            #stop the fish from moving and set its y coordinate to be glued to the fihsing line
+            hooked_fish['speed'] = 0  
+            hooked_fish['x'] = fishing_line_x - 25  
+            hooked_fish['y'] = fishing_line_y  
             break
         elif buttonVal == 0 and hooked_fish:
-            hooked_fish['speed'] = random.choice(fish_speeds)  # Reset fish's speed
-            hooked_fish = None  # Remove fish from hooked state
+            #if button is clicked again, let go of fish
+            hooked_fish['speed'] = random.choice(fish_speeds) 
+            hooked_fish = None  
 
-# check if hit horizon and if fish is hooked == get points
+# check if fish hits horizon line and is hooked == get points. Points based on fish color
 def reel_in_fish():
     global hooked_fish, points
     if fishing_line_y <= HORIZON_Y:
         if hooked_fish:
-            points += hooked_fish['points']  # Increment points based on the points value of the caught fish
+            points += hooked_fish['points']  
             fish_list.remove(hooked_fish)
             hooked_fish = None
 
@@ -184,7 +189,7 @@ while running:
         outer_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 100)  
         inner_rect = outer_rect.inflate(-10, -10)  
 
-        # Instructions rectangle and border
+        #  rectangle with instructions and border
         pygame.draw.rect(screen, BLUE_SKY, outer_rect)
         pygame.draw.rect(screen, BLUE_WATER, inner_rect)
 
